@@ -1,6 +1,5 @@
 flask
-gunicorn
-firebase-admin
 python-telegram-bot
-requests
+firebase-admin
+uvicorn
 pillow
