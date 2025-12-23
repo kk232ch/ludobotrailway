@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 from flask import Flask, request
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -12,7 +13,17 @@ from game_engine import draw_board
 
 # --- 1. SETUP FIREBASE ---
 if not firebase_admin._apps:
-    cred = credentials.ApplicationDefault() 
+    # Check if we have the key in Environment Variables (Railway method)
+    firebase_key = os.environ.get("FIREBASE_KEY")
+    
+    if firebase_key:
+        # Load from the variable we just added in Railway
+        cred_dict = json.loads(firebase_key)
+        cred = credentials.Certificate(cred_dict)
+    else:
+        # Fallback to default (for local testing or Google Cloud)
+        cred = credentials.ApplicationDefault()
+        
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
